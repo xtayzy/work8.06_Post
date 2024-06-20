@@ -71,9 +71,15 @@ def comment_delete(request, id):
 
 def cat_info(request, id):
     cat = Category.objects.get(pk=id)
+    if request.method == 'POST':
+        form = CategoryForm(request.POST, instance=cat)
+        if form.is_valid():
+            form.save()
 
     ctx = {
         'cat': cat,
+        'posts': Post.objects.filter(category=cat),
+        'cat_form': CategoryForm(),
     }
     return render(request, 'post/cat_info.html', ctx)
 
