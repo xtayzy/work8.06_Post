@@ -1,0 +1,69 @@
+<style>
+    .comment {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        border: 1px solid black;
+        padding: 10px;
+    }
+
+    .header {
+        border: 1px solid black;
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+</style>
+
+
+{% extends 'post/layouts/base.html' %}
+
+{% include 'post/includes/header.html' with logo="logo text" %}
+
+{% block content %}
+    <div class="header">
+        <a href="{% url 'index' %}">Index page</a>
+    </div>
+    <div class="">
+        <h1>Edit post</h1>
+        <form action="{% url 'edit_post' id=post.id %}" method="post">
+            {% csrf_token %}
+            {{ post_form.as_p }}
+            <button>Сохранить</button>
+        </form>
+    </div>
+    <div class="">
+        <h1>Add comment</h1>
+        <form action="" method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button>Добавить</button>
+        </form>
+    </div>
+    <h1>Post</h1>
+    <div class="info">
+        <div>
+            title: {{ post.title }}
+        </div>
+
+        <div>
+            author: {{ post.author }}
+        </div>
+
+        <div>
+            category: {{ post.category.name }}
+        </div>
+    </div>
+    <h1>Comments</h1>
+    <div class="comments">
+        {% for comment in comments %}
+            <div class="comment">
+                <div>{{ comment.author }}</div>
+                <div>{{ comment.date_posted }}</div>
+                <div>{{ comment.content }}</div>
+                <a href="{% url 'comment_delete' id=comment.id %}">delete</a>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock content %}
